@@ -1,0 +1,52 @@
+Pesquisa sobre a arquitetura AWS da Amazon e a arquitetura Azure da Microsoft.
+
+->Características;
+
+AWS: Lançado em 2006 pela amazona, seu foco é em alta escalabilidade e flexibilidade em nuvem, seus serviços principais são em EC2, S3, IOT Core e Lambda
+
+Azure: Lançado em 2010 pela Microsoft, com foco em integração com produtos Microsoft, tendo serviços principais  em Virtual Machines, Blob Storage, IOT Hub e Functions.
+---------------------------------------------------------------------------------------
+->Como Funciona;
+
+AWS: Baseia-se em regiões e zonas de disponibilidade, os usuários criam instâncias e recursos sob demanda e o AWS IoT Core conecta dispositivos físicos à nuvem, permitindo enviar e receber dados
+
+Azure: Também trabalha com regiões globais, integrando seus serviços com o ecossistema Microsoft, o Azure IoT Hub faz a ponte entre dispositivos IoT e a nuvem, facilitando comunicação segura e bidirecional
+---------------------------------------------------------------------------------------
+->Métodos de Utilização;
+
+AWS:
+Interface - Console Web e CLI 
+Conexão com Arduino - Via AWS Iot Core ► MQTT
+Linguagens Compatíveis - C, Python, Nods.js, Java, etc.
+Integração - APIs REST e SDKs para várias plataformas
+
+Azure:
+
+Interface - Portal Azure e Azure CLI
+Conexão com Arduino - Via Azure IoT Hub ► MQTT, HTTPS, AMQP
+Linguagens Compatíveis - C#, Python, Node.js, etc.
+Integração -APIs, SDKs e integração direta com o Visual Studio
+---------------------------------------------------------------------------------------
+->Vantagens de cada uma;
+
+AWS: Alta escalabilidade e confiabilidade, grande variedade de serviços, documentação ampla, comunidade ativa e flexibilidade para empresas de todos os portes
+
+Azure: Integração natural com o ecossistema da Microsoft, fácil autenticação com contas Microsoft e Active Directory, boa interface visual e suporte técnico em português e ferramentas prontas para analises e dashboards 
+---------------------------------------------------------------------------------------
+->Desvantagens de cada uma;
+
+AWS: Maior dificuldade de aprendizado devido a alta quantidade de serviços, pode ser mais caro se não for bem configurado e a interface é menos intuitiva que o Azure
+
+Azure: Menor quantidade de serviços globais comparado ao AWS, algumas integrações podem ser limitadas fora do ecossistema Microsoft e dependência de ferramentas Microsoft em certas funções.
+---------------------------------------------------------------------------------------
+
+->Qual a melhor para a utilização com o Arduino;
+
+Recomendado é o AWS IoT Core, por ser mais flexível e ter maior amplitude compatível com microcontroladores como Arduino, tem suporte nativo a MQTT, TLS e Shadow Devices e há bibliotecas prontas da AWS para Arduino
+
+
+
+
+
+
+
