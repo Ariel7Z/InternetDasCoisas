@@ -1,0 +1,183 @@
+#define saida 1
+#define saida1 2
+#define saida2 3
+
+ int y =0;
+  int x =0;
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(saida,OUTPUT);
+  pinMode(saida1,OUTPUT);
+  pinMode(saida2,OUTPUT);
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+ while (x < 3){
+  digitalWrite(saida,HIGH);
+  delay(500);
+  digitalWrite(saida,LOW);
+  delay(500);
+  x++;
+  }
+
+  while ( y < 5 ){
+  digitalWrite(saida1,HIGH);
+  delay(500);
+  digitalWrite(saida1,LOW);
+  delay(500);
+  y++;
+  }
+
+  
+  digitalWrite(saida2,HIGH);
+  delay(500);
+  digitalWrite(saida2,LOW);
+  delay(500);
+  
+}
+
+=======================================================================================
+
+#define saida 1
+#define saida1 2
+#define saida2 3
+
+int contSaida = 0;
+int contSaida1 = 0;
+
+void setup() {
+  // put your setup code here, to run once:
+
+  pinMode(saida, OUTPUT);
+  pinMode(saida1, OUTPUT);
+  pinMode(saida2, OUTPUT);
+}
+
+void loop() {
+    // put your main code here, to run repeatedly:
+
+  if (contSaida < 3) digitalWrite(saida, HIGH);
+  if (contSaida1 < 5) digitalWrite(saida1, HIGH);
+  digitalWrite(saida2, HIGH);
+
+  delay(500);
+
+  if (contSaida < 3) digitalWrite(saida, LOW);
+  if (contSaida1 < 5) digitalWrite(saida1, LOW);
+  digitalWrite(saida2, LOW);
+
+  delay(500);
+
+  if (contSaida < 3) contSaida++;
+  if (contSaida1 < 5) contSaida1++;
+}
+=======================================================================================
+
+#define SAIDA 2
+#define LED1 8
+#define LED2 9
+#define LED3 10
+
+int led3 = 0;
+int led2 = 0;
+int led1 = 0;
+
+void setup() {
+  pinMode(SAIDA, OUTPUT);
+  pinMode(LED1, INPUT);
+  pinMode(LED2, INPUT);
+  pinMode(LED3, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  led3 = digitalRead(LED3);
+  led2 = digitalRead(LED2);
+  led1 = digitalRead(LED1);
+
+  if (led3 && led2 && led1) {
+    Serial.print(" 111 = 7 ");
+    for (int i = 0; i < 7; i++) {
+      digitalWrite(SAIDA, HIGH);
+      delay(500);
+      digitalWrite(SAIDA, LOW);
+      delay(500);
+    }
+    delay(2000);
+  }
+
+  else if (led3 && led2) {
+    Serial.print(" 110 = 6 ");
+    for (int i = 0; i < 6; i++) {
+      digitalWrite(SAIDA, HIGH);
+      delay(500);
+      digitalWrite(SAIDA, LOW);
+      delay(500);
+    }
+    delay(2000);
+  }
+
+  else if (led3 && led1) {
+    Serial.print(" 101 = 5 ");
+    for (int i = 0; i < 5; i++) {
+      digitalWrite(SAIDA, HIGH);
+      delay(500);
+      digitalWrite(SAIDA, LOW);
+      delay(500);
+    }
+    delay(2000);
+  }
+
+  else if (led3) {
+    Serial.print(" 100 = 4 ");
+    for (int i = 0; i < 4; i++) {
+      digitalWrite(SAIDA, HIGH);
+      delay(500);
+      digitalWrite(SAIDA, LOW);
+      delay(500);
+    }
+    delay(2000);
+  }
+
+  else if (led2 && led1) {
+    Serial.print(" 011 = 3 ");
+    for (int i = 0; i < 3; i++) {
+      digitalWrite(SAIDA, HIGH);
+      delay(500);
+      digitalWrite(SAIDA, LOW);
+      delay(500);
+    }
+    delay(2000);
+  }
+
+  else if (led2) {
+    Serial.print(" 010 = 2 ");
+    for (int i = 0; i < 2; i++) {
+      digitalWrite(SAIDA, HIGH);
+      delay(500);
+      digitalWrite(SAIDA, LOW);
+      delay(500);
+    }
+    delay(2000);
+  }
+
+  else if (led1) {
+    Serial.print(" 001 = 1 ");
+    for (int i = 0; i < 1; i++) {
+      digitalWrite(SAIDA, HIGH);
+      delay(500);
+      digitalWrite(SAIDA, LOW);
+      delay(500);
+    }
+    delay(2000);
+  }
+
+  else {
+    Serial.print(" 000 = 0 ");
+    digitalWrite(SAIDA, LOW);
+  }
+}
