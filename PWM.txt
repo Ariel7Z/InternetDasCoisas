@@ -1,0 +1,133 @@
+1. O que é o Modulador PWM
+Explique o significado de “Modulação por Largura de Pulso”.
+
+R- PWM é a Modulação por Largura de Pulso, onde variamos o tempo em que o sinal fica em nível alto
+
+O que significa “Duty Cycle”?
+
+R- O duty cycle é a porcentagem do tempo em que o sinal fica ligado
+
+Qual é a diferença entre PWM e um sinal analógico contínuo?
+
+R- A diferença é que PWM é liga/desliga rápido, enquanto sinal analógico varia de forma contínua
+
+2. Como o PWM funciona
+Descreva como o PWM gera diferentes níveis médios de tensão.
+
+R- O PWM muda a tensão média aumentando ou reduzindo o tempo “ligado”
+
+Mostre um gráfico representando diferentes duty cycles (25%, 50%, 75%).
+
+25% = pouco tempo ligado, 50% = metade, 75% = maioria do tempo
+25% = ▮▮▮
+50% = ▮▮▮▮▮▮
+75% = ▮▮▮▮▮▮▮▮▮
+
+Explique como a frequência do sinal influencia o comportamento da carga.
+
+R- quanto maior, mais suave é o efeito (LED não pisca, motor não vibra)
+
+3. Para que serve o PWM
+Liste e explique aplicações do PWM em:
+
+Controle de velocidade de motores DC;
+
+R- O PWM ajusta a velocidade variando a energia média enviada ao motor, Duty cycles maiores fazem o motor girar mais rápido, menores o deixam lento, é eficiente porque o driver opera só em liga/desliga, sem dissipar calor como controle analógico
+
+Controle de brilho de LEDs;
+
+R- O PWM altera o tempo em que o LED fica aceso em cada ciclo, um duty cycle alto deixa o LED mais brilhante, enquanto um baixo o deixa fraco, isso evita perda de energia e não altera a cor do LED, diferente de reduzir tensão
+
+
+
+Controle de temperatura e potência elétrica;
+
+R- Resistências, aquecedores e TECs recebem mais ou menos energia conforme o duty cycle, assim, a temperatura é controlada sem dissipadores grandes e com alta precisão, muito usado em hotends, camas aquecidas, controladores industriais e fontes chaveadas.
+
+Outras aplicações em robótica e IoT.
+
+R- PWM controla servomotores, solenóides, ventiladores, bombas d’água e drivers de potência, é essencial para economizar energia em dispositivos IoT e prolongar bateria, também ajusta a intensidade de displays, gera sinais de controle e movimenta atuadores.
+
+4. Importância do PWM
+Por que o PWM é mais eficiente que um sinal analógico puro?
+
+R- É mais eficiente que analógico porque os transistores operam só ligado/desligado.
+
+Qual é a vantagem de controlar energia através do duty cycle?
+
+R- Controlar energia pelo duty cycle é preciso e economiza consumo, o Duty Cycle permite controle fino da energia entregue sem componentes caros.
+
+Explique a importância do PWM no consumo energético e na precisão de controle.
+
+R- É vital para controles finos em eletrônica embarcada, garante baixo consumo e alta precisão em sistemas embarcados e dispositivos IoT.
+
+
+5. Aplicação prática no Arduino
+Como o Arduino gera um sinal PWM?
+
+R- O Arduino gera PWM usando timers internos que acionam rápida comutação nos pinos.
+
+Quais pinos possuem suporte (marcados com ~)?
+
+R- Pinos 3, 5, 6, 9, 10 e 11
+
+Mostre um exemplo prático com código, por exemplo, controle de brilho de um LED:
+
+#define saida 1
+#define saida1 2
+#define saida2 3
+
+ int y =0;
+  int x =0;
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(saida,OUTPUT);
+  pinMode(saida1,OUTPUT);
+  pinMode(saida2,OUTPUT);
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+ while (x < 3){
+  digitalWrite(saida,HIGH);
+  delay(500);
+  digitalWrite(saida,LOW);
+  delay(500);
+  x++;
+  }
+
+  while ( y < 5 ){
+  digitalWrite(saida1,HIGH);
+  delay(500);
+  digitalWrite(saida1,LOW);
+  delay(500);
+  y++;
+  }
+
+  
+  digitalWrite(saida2,HIGH);
+  delay(500);
+  digitalWrite(saida2,LOW);
+  delay(500);
+  
+}
+
+6. Interferência do PWM no ADC
+-Explique o que é o ADC (Conversor Analógico-Digital) e sua função no microcontrolador.
+
+R- ADC converte tensões analógicas em valores digitais (0–1023 no Arduino).
+
+-Descreva como sinais PWM podem interferir em medições analógicas, caso não haja filtragem.
+
+R- PWM interfere porque o sinal é pulsado, e sem filtro o ADC lê valores oscilantes.
+
+-Cite soluções para evitar interferências (uso de filtros RC, capacitores e separação de alimentação). 
+
+R- filtro RC, capacitor de desacoplamento, fontes separadas para potência e sensores.
+
+-Explique por que é importante entender essa interferência em projetos de IoT.
+
+R- Em IoT é importante para garantir medições estáveis e evitar erros de sensores.
