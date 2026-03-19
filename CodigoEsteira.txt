@@ -1,0 +1,44 @@
+// pinos
+#define PINO_IN1 5
+#define PINO_IN2 6
+#define LIGADO 2
+
+#define VELOCIDADE_MAX 120
+
+int valor_pwm = 0;
+int ligado = 0;
+int desligado = 0;
+int ativo = 0;
+
+void setup() {
+  pinMode(PINO_IN1, OUTPUT);
+  pinMode(PINO_IN2, OUTPUT);
+  pinMode(LIGADO, INPUT_PULLUP);
+  Serial.begin(9600);
+  Serial.println("Lendo VARIAVEL BOTÃO...");
+
+
+  // inicia desligado
+  analogWrite(PINO_IN1, 0);
+  analogWrite(PINO_IN2, 0);
+  digitalWrite(LIGADO, LOW);
+}
+
+void loop() 
+{
+  ligado = digitalRead(LIGADO);
+  Serial.print("botão verde - ");
+  Serial.println(ligado);
+  delay(1000);
+  // acelera com o botão apertado
+  if (ligado == HIGH && ativo == 0)
+  {
+    // acelera gradualmente
+    for (valor_pwm = 0; valor_pwm <= VELOCIDADE_MAX; valor_pwm++)
+    {
+      analogWrite(PINO_IN1, valor_pwm);
+      delay(100);
+    }
+      ativo = 1;
+  }
+}

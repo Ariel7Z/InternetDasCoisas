@@ -1,0 +1,121 @@
+// Bibliotecas necessárias para o leitor e para o motor funcionarem
+#include <SPI.h>
+#include <MFRC522.h>
+#include <Servo.h>
+
+// Dando nomes fáceis de entender aos Pinos do Arduino
+#define PINO_SELETOR_DO_LEITOR 10  // Antigo SS_PIN (Diz ao Arduino com quem ele vai falar)
+#define PINO_RESET_DO_LEITOR 9     // Antigo RST_PIN (Usado para reiniciar o leitor se der erro)
+#define PINO_DO_MOTOR_DA_PORTA 3   // Antigo SERVO_PIN (Onde o motor está ligado)
+
+// Criando os "objetos" que vamos controlar no código
+MFRC522 leitorDeCartao(PINO_SELETOR_DO_LEITOR, PINO_RESET_DO_LEITOR); // Antigo mfrc522
+Servo motorDaPorta; // Antigo porta
+
+// Definindo os ângulos do motor
+int anguloPortaFechada = 0;   // Antigo posFechada
+int anguloPortaAberta = 90;   // Antigo posAberta
+
+void setup() 
+{
+  Serial.begin(9600); // Inicia a tela de texto (Monitor Serial)
+  SPI.begin();        // Inicia a comunicação do Arduino
+  leitorDeCartao.PCD_Init(); // Liga o leitor de cartão
+
+  motorDaPorta.attach(PINO_DO_MOTOR_DA_PORTA); // Avisa onde o motor está ligado
+  motorDaPorta.write(anguloPortaFechada);      // Garante que a porta comece fechada
+
+  Serial.println("Aproxime o seu cartao do leitor...");
+}
+
+void loop() 
+{
+  // Verifica se uma pessoa encostou um cartão novo no leitor
+  if (!leitorDeCartao.PICC_IsNewCardPresent()) 
+  {
+    motorDaPorta.write(anguloPortaFechada); // Mantém a porta fechada
+    return; // Para o código aqui e recomeça o loop
+  }
+
+  // Tenta ler o chip (código interno) do cartão
+  if (!leitorDeCartao.PICC_ReadCardSerial()) 
+  {
+    motorDaPorta.write(anguloPortaFechada);
+    return;
+  }
+
+  Serial.print("Codigo do cartao: "); // Antigo UID da tag
+  String codigoLido = ""; // Antigo "conteudo"
+
+  // Esse bloco de matemática transforma o sinal elétrico do cartão em letras e números normais
+  for (byte i = 0; i < leitorDeCartao.uid.size; i++) 
+  {
+    Serial.print(leitorDeCartao.uid.uidByte[i] < 0x10 ? " 0" : " ");
+    Serial.print(leitorDeCartao.uid.uidByte[i], HEX);
+
+    codigoLido.concat(String(leitorDeCartao.uid.uidByte[i] < 0x10 ? " 0" : " "));
+    codigoLido.concat(String(leitorDeCartao.uid.uidByte[i], HEX));
+  }
+
+  Serial.println();
+  codigoLido.toUpperCase(); // Deixa as letras do código todas maiúsculas
+
+  // CARTÃO AUTORIZADO (Se o código lido for igual a um desses dois)
+  if (codigoLido.substring(1) == "83 6C 26 13" || codigoLido.substring(1) == "63 8C C5 0B")
+  {
+    Serial.println("Acesso liberado");
+    motorDaPorta.write(anguloPortaAberta); // Abre a porta
+  }
+
+  // CARTÃO NEGADO
+  if (codigoLido.substring(1) == "BD 9B 06 7D")
+  {
+    Serial.println("Acesso negado");
+    motorDaPorta.write(anguloPortaFechada); // Trava a porta
+  }
+
+  delay(2000); // Espera 2 segundos antes de permitir que leiam outro cartão
+}
+
+
+/*
+// Define os pinos do sensor
+const int pinoEmissorDeSom = 7;
+const int pinoReceptorDeSom = 6;
+
+// Define variáveis para guardar os números que vamos calcular
+long tempoDoEco;
+int distanciaEmCentimetros;
+
+void setup() {
+  // Configura quem fala e quem ouve
+  pinMode(pinoEmissorDeSom, OUTPUT); // Saída de som
+  pinMode(pinoReceptorDeSom, INPUT); // Entrada de som
+
+  // Aparece a tela de texto
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Emite uma onda sonora super rápida
+  digitalWrite(pinoEmissorDeSom, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pinoEmissorDeSom, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(pinoEmissorDeSom, LOW);
+
+  // O comando pulseIn escuta o pino receptor e cronometra quanto tempo o eco demorou
+  tempoDoEco = pulseIn(pinoReceptorDeSom, HIGH);
+
+  // Calcula a distância usando o tempo e a velocidade do som
+  distanciaEmCentimetros = tempoDoEco * 0.034 / 2;
+
+  // Exibe o resultado no computador
+  Serial.print("Distancia: ");
+  Serial.print(distanciaEmCentimetros);
+  Serial.println(" cm");
+
+  //1 segundo antes de medir de novo
+  delay(1000);
+}
+*/
