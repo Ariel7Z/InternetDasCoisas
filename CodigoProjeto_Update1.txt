@@ -1,0 +1,116 @@
+#include <Servo.h>
+#include <Ultrasonic.h>
+
+// Ultrassom
+#define TRIGGER_PIN 7
+#define ECHO_PIN 6
+
+Ultrasonic ultrasonic(TRIGGER_PIN, ECHO_PIN);
+
+// Servos
+#define PINO_SERVO_PORTA 3
+#define PINO_SERVO_BOTAO 5
+#define PINO_BOTAO 2
+
+Servo servoPorta;
+Servo servoBotao;
+
+// Ângulos
+int anguloFechado = 0;
+int anguloAberto = 90;
+
+// Controle millis (servo porta)
+unsigned long tempoAnterior = 0;
+unsigned long intervalo = 30;
+
+int posicaoAtual = 0;
+bool abrindo = false;
+bool fechando = false;
+
+// Botão
+bool estadoBotao = false;
+
+// 🔹 Variáveis da média (SEM TRAVAR)
+long soma = 0;
+int contador = 0;
+int distanciaMedia = 0;
+
+void setup() {
+  pinMode(PINO_BOTAO, INPUT_PULLUP);
+
+  servoPorta.attach(PINO_SERVO_PORTA);
+  servoBotao.attach(PINO_SERVO_BOTAO);
+
+  servoPorta.write(anguloFechado);
+  servoBotao.write(0);
+
+  Serial.begin(9600);
+}
+
+// 🔹 Atualiza média aos poucos (sem delay)
+void atualizarMedia() {
+  int d = ultrasonic.read();
+
+  if (d > 2 && d < 400) {
+    soma += d;
+    contador++;
+  }
+
+  if (contador >= 50) {
+    distanciaMedia = soma / contador;
+    soma = 0;
+    contador = 0;
+  }
+}
+
+void loop() {
+
+  // 🔹 Atualiza leitura continuamente
+  atualizarMedia();
+  int distancia = distanciaMedia;
+
+  // 🔹 Zona de tolerância
+  if (distancia <= 5) {
+    abrindo = true;
+    fechando = false;
+  } 
+  else if (distancia >= 8) {
+    fechando = true;
+    abrindo = false;
+  }
+
+  // 🔹 Movimento suave com millis
+  unsigned long tempoAtual = millis();
+
+  if (tempoAtual - tempoAnterior >= intervalo) {
+    tempoAnterior = tempoAtual;
+
+    if (abrindo && posicaoAtual < anguloAberto) {
+      posicaoAtual++;
+      servoPorta.write(posicaoAtual);
+    }
+
+    if (fechando && posicaoAtual > anguloFechado) {
+      posicaoAtual--;
+      servoPorta.write(posicaoAtual);
+    }
+  }
+
+  // 🔹 Botão (toggle)
+  if (digitalRead(PINO_BOTAO) == LOW) {
+    estadoBotao = !estadoBotao;
+    delay(200); // debounce simples
+  }
+
+  // 🔹 Servo do botão
+  if (estadoBotao) {
+    servoBotao.write(90);
+  } else {
+    servoBotao.write(0);
+  }
+
+  // Debug
+  Serial.print("Distancia media: ");
+  Serial.print(distancia);
+  Serial.println(" cm");
+}
